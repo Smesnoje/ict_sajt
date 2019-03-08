@@ -45,6 +45,7 @@ $menus = $list_menu->fetchAll();
 
   <?php foreach($photos as $photo):?>
       <div class="one-third gallery_photo" style="background-image:url('<?php echo $photo->image_path;?>')">
+      <h2 class="image_naslov"><?php echo $photo->image_naslov;?></h2>
       </div>
   <?php endforeach;?>
 </section>

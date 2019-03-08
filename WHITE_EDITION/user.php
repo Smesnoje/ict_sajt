@@ -81,6 +81,7 @@ $menus = $list_menu->fetchAll();
       <div class="add_picture">
           <form action="user.php" method="POST"name="image_add"id="image_add" enctype="multipart/form-data" >
                   <input type="file" name="fileToUpload" accept="image/jpg,image/jpeg" /> 
+                  <input type="text" name="image_naslov" id='image_naslov' placeholder="Opis slike">
                   <input type="submit" name="image_add">
           </form>
         
@@ -90,10 +91,11 @@ $menus = $list_menu->fetchAll();
           $target_path = $target_path.basename( $_FILES['fileToUpload']['name']); 
           if(move_uploaded_file($_FILES['fileToUpload']['tmp_name'], __DIR__.'/gallery/'.$_FILES['fileToUpload']['name'])) { 
             echo "File uploaded successfully!"; 
-            $query ="INSERT INTO gallery (image_path) values (?)";
+            $query ="INSERT INTO gallery (image_path,image_naslov) values (?,?)";
             $image_path ='gallery/'. $_FILES['fileToUpload']['name'];;
+            $image_naslov= $_POST['image_naslov'];
             $stmt = $konekcija->prepare($query);
-            $stmt->execute([$image_path]);
+            $stmt->execute([$image_path,$image_naslov]);
             echo '<script type="text/javascript">';
             echo 'window.location.href="user.php?msg=Uspesno ste poslali sliku";';
             echo '</script>';

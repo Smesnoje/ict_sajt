@@ -214,6 +214,7 @@ $photos = $list_photos->fetchAll();
       <div class="add_picture">
           <form action="admin.php" method="POST"name="image_add"id="image_add" enctype="multipart/form-data" >
                   <input type="file" name="fileToUpload" accept="image/jpg,image/jpeg" /> 
+                  <input type="text" name="image_naslov" id='image_naslov' placeholder="Opis slike">
                   <input type="submit" name="image_add">
           </form>
         
@@ -223,10 +224,11 @@ $photos = $list_photos->fetchAll();
           $target_path = $target_path.basename( $_FILES['fileToUpload']['name']); 
           if(move_uploaded_file($_FILES['fileToUpload']['tmp_name'], __DIR__.'/gallery/'.$_FILES['fileToUpload']['name'])) { 
             echo "File uploaded successfully!"; 
-            $query ="INSERT INTO gallery (image_path) values (?)";
-            $image_path ='gallery/'. $_FILES['fileToUpload']['name'];;
+            $query ="INSERT INTO gallery (image_path,image_naslov) values (?,?)";
+            $image_path ='gallery/'. $_FILES['fileToUpload']['name'];
+            $image_naslov= $_POST['image_naslov'];
             $stmt = $konekcija->prepare($query);
-            $stmt->execute([$image_path]);
+            $stmt->execute([$image_path,$image_naslov]);
             echo '<script type="text/javascript">';
             echo 'window.location.href="admin.php";';
             echo '</script>';
@@ -249,6 +251,7 @@ $photos = $list_photos->fetchAll();
         <table>
         <tr class="table-rows">
             <th class="table-heading">Photo</th>
+            <th class="table-heading">Naslov</th> 
             <th class="table-heading"></th> 
         </tr >
         <?php foreach ($photos as $photo): ?>
@@ -257,6 +260,9 @@ $photos = $list_photos->fetchAll();
              <td class="table-data" >
               <img class ="thumbnail" src="<?php echo $photo->image_path;?>" alt="">
             </td >
+            <td class="table-data">
+                <h3 class="image_naslov_list "><?php echo $photo->image_naslov; ?></h3>
+            </td>
             <td class="table-data">
                 <a href="delete_user.php?id=<?php echo $user->user_id?> "> Delete</a>
             </td>
